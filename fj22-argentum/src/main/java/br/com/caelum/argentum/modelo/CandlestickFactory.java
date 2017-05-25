@@ -9,13 +9,21 @@ import br.com.caelum.argentum.builder.CandleBuilder;
 public class CandlestickFactory {
 
 	public Candlestick constroiCandleParaData(Calendar data, List<Negociacao> negociacoes) {
-		double maximo = negociacoes.stream().max(Comparator.comparingDouble(Negociacao::getPreco)).get().getPreco();
-		double minimo = negociacoes.stream().min(Comparator.comparingDouble(Negociacao::getPreco)).get().getPreco();
-		double volume = negociacoes.stream().mapToDouble(Negociacao::getVolume).sum();
-		double abertura = negociacoes.get(0).getPreco();
-		double fechamento = negociacoes.get(negociacoes.size() - 1).getPreco();
+		double maximo = 0;
+		double minimo = Double.MAX_VALUE;
+		double volume = 0;
+		double abertura = 0;
+		double fechamento = 0;
 		
-		return new CandleBuilder().comMaximo(maximo).comMinimo(minimo).comVolume(volume)
-				.comAbertura(abertura).comFechamento(fechamento).comData(data).geraCandle();
+		if (!negociacoes.isEmpty()) {
+			maximo = negociacoes.stream().max(Comparator.comparingDouble(Negociacao::getPreco)).get().getPreco();
+			minimo = negociacoes.stream().min(Comparator.comparingDouble(Negociacao::getPreco)).get().getPreco();
+			volume = negociacoes.stream().mapToDouble(Negociacao::getVolume).sum();
+			abertura = negociacoes.get(0).getPreco();
+			fechamento = negociacoes.get(negociacoes.size() - 1).getPreco();
+		}
+
+		return new CandleBuilder().comMaximo(maximo).comMinimo(minimo).comVolume(volume).comAbertura(abertura)
+				.comFechamento(fechamento).comData(data).geraCandle();
 	}
 }
