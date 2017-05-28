@@ -10,7 +10,7 @@ public class CandlestickFactory {
 
 	public Candlestick constroiCandleParaData(Calendar data, List<Negociacao> negociacoes) {
 		double maximo = 0;
-		double minimo = Double.MAX_VALUE;
+		double minimo = 0;
 		double volume = 0;
 		double abertura = 0;
 		double fechamento = 0;

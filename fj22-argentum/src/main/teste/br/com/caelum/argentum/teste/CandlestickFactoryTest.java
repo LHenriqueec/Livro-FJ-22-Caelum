@@ -1,5 +1,7 @@
 package br.com.caelum.argentum.teste;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -12,10 +14,10 @@ import br.com.caelum.argentum.modelo.Candlestick;
 import br.com.caelum.argentum.modelo.CandlestickFactory;
 import br.com.caelum.argentum.modelo.Negociacao;
 
-public class TestaCandlestickFactory {
+public class CandlestickFactoryTest {
 
 	@Test
-	public void testeFactory() {
+	public void sequencia_simples_de_negociacoes() {
 		Calendar hoje = Calendar.getInstance();
 		
 		Negociacao negociacao1 = new Negociacao(40.5, 100, hoje);
@@ -28,7 +30,11 @@ public class TestaCandlestickFactory {
 		CandlestickFactory factory = new CandlestickFactory();
 		Candlestick candle = factory.constroiCandleParaData(hoje, negociacoes);
 		
-		System.out.println(candle);
+		assertEquals(40.5, candle.getAbertura(), 0.00001);
+		assertEquals(42.3, candle.getFechamento(), 0.00001);
+		assertEquals(39.8, candle.getMinimo(), 0.00001);
+		assertEquals(45.0, candle.getMaximo(), 0.00001);
+		assertEquals(16760.0, candle.getVolume(), 0.00001);
 	}
 	
 	@Test
@@ -37,11 +43,18 @@ public class TestaCandlestickFactory {
 				.comFechamento(42.3).comMinimo(39.8).comMaximo(45.0)
 				.comVolume(145234.20).comData(new GregorianCalendar(2008, 8, 12, 0, 0, 0)).geraCandle();
 		
-		System.out.println(candle);
+		assertEquals(candle.getAbertura(), 40.5, 0.00001);
+		assertEquals(candle.getFechamento(), 42.3, 0.00001);
+		assertEquals(candle.getMinimo(), 39.8, 0.00001);
+		assertEquals(candle.getMaximo(), 45.0, 0.00001);
+		assertEquals(candle.getVolume(), 145234.20, 0.00001);
+		
+		Calendar date = new GregorianCalendar(2008, 8, 12, 0, 0, 0);
+		assertEquals(candle.getData(), date);
 	}
 	
 	@Test
-	public void testando_uma_negociacao() {
+	public void testando_uma_negociacao_gera_candle_com_valores_iguais() {
 		Calendar hoje = Calendar.getInstance();
 		
 		Negociacao negociacao = new Negociacao(40.5, 100, hoje);
@@ -50,7 +63,8 @@ public class TestaCandlestickFactory {
 		
 		Candlestick candle = new CandlestickFactory().constroiCandleParaData(hoje, negociacoes);
 		
-		System.out.println(candle);
+		assertEquals(candle.getAbertura(), candle.getFechamento(), 0.00001);
+		assertEquals(candle.getMaximo(), candle.getMaximo(), 0.00001);
 	}
 	
 	@Test
@@ -61,7 +75,11 @@ public class TestaCandlestickFactory {
 		
 		Candlestick candle = new CandlestickFactory().constroiCandleParaData(hoje, negociacoes);
 		
-		System.out.println(candle);
+		assertEquals(0.0, candle.getVolume(), 0.00001);
+		assertEquals(0.0, candle.getAbertura(), 0.00001);
+		assertEquals(0.0, candle.getFechamento(), 0.00001);
+		assertEquals(0.0, candle.getMaximo(), 0.00001);
+		assertEquals(0.0, candle.getMinimo(), 0.00001);
 	}
 	
 	@Test
@@ -77,7 +95,8 @@ public class TestaCandlestickFactory {
 		
 		Candlestick candle = new CandlestickFactory().constroiCandleParaData(hoje, negociacoes);
 		
-		System.out.println(candle);
+		assertEquals(53.3, candle.getAbertura(), 0.00001);
+		assertEquals(40.5, candle.getFechamento(), 0.00001);
 	}
 	
 	@Test
@@ -93,6 +112,7 @@ public class TestaCandlestickFactory {
 		
 		Candlestick candle = new CandlestickFactory().constroiCandleParaData(hoje, negociacoes);
 		
-		System.out.println(candle);
+		assertEquals(40.5, candle.getAbertura(), 0.00001);
+		assertEquals(53.3, candle.getFechamento(), 0.00001);
 	}
 }
